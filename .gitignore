@@ -1,0 +1,38 @@
+# Compiled class files and build output
+**/target/
+
+# Maven wrapper (can be regenerated)
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+.factorypath
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+**/logs/
+
+# Environment and secrets
+.env
+*.env
+application-local.properties
+application-local.yml
+
+# H2 database files
+*.db
+*.mv.db
+*.trace.db
