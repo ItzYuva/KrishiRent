@@ -5,7 +5,7 @@ import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
-import { Equipment, CATEGORY_IMAGES, CATEGORY_COLORS, BookingRequest, PaymentRequest } from '../../models/equipment.model';
+import { Equipment, CATEGORY_IMAGES, BookingRequest, PaymentRequest } from '../../models/equipment.model';
 
 @Component({
   selector: 'app-equipment-detail',
@@ -549,7 +549,12 @@ export class EquipmentDetailComponent implements OnInit {
   categoryColor = computed(() => {
     const eq = this.equipment();
     if (!eq) return '#6B7280';
-    return CATEGORY_COLORS[eq.type] || '#6B7280';
+    const typeColors: Record<string, string> = {
+      TRACTOR: '#22c55e', HARVESTER: '#f59e0b', IRRIGATION: '#3b82f6',
+      PUMP: '#06b6d4', SPRAYER: '#8b5cf6', SEEDER: '#10b981',
+      PLOUGH: '#f97316', THRESHER: '#14b8a6'
+    };
+    return typeColors[eq.type] || '#6B7280';
   });
 
   minDateTime = computed(() => {

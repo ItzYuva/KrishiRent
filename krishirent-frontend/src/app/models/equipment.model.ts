@@ -80,6 +80,19 @@ export interface PaymentRequest {
   paymentMethod: string;
 }
 
+export type UserRole = 'FARMER' | 'AGENT' | 'ADMIN';
+
+export const EQUIPMENT_TYPES = [
+  { value: 'TRACTOR', label: 'Tractor', icon: '🚜' },
+  { value: 'HARVESTER', label: 'Harvester', icon: '🌾' },
+  { value: 'IRRIGATION', label: 'Irrigation', icon: '💧' },
+  { value: 'PUMP', label: 'Pump', icon: '⛽' },
+  { value: 'SPRAYER', label: 'Sprayer', icon: '🔫' },
+  { value: 'SEEDER', label: 'Seeder', icon: '🌱' },
+  { value: 'PLOUGH', label: 'Plough', icon: '⚙️' },
+  { value: 'THRESHER', label: 'Thresher', icon: '🏭' }
+];
+
 export const CATEGORY_IMAGES: { [key: string]: string } = {
   TRACTOR: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=600',
   HARVESTER: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600',
@@ -92,21 +105,22 @@ export const CATEGORY_IMAGES: { [key: string]: string } = {
   DEFAULT: 'https://images.unsplash.com/photo-1500595046743-cd271d694e30?w=600'
 };
 
-export const CATEGORY_COLORS: { [key: string]: string } = {
-  TRACTOR: '#2E7D32',
-  HARVESTER: '#E65100',
-  IRRIGATION: '#0277BD',
-  PUMP: '#0277BD',
-  SPRAYER: '#6A1B9A',
-  SEEDER: '#558B2F',
-  PLOUGH: '#4E342E',
-  THRESHER: '#4E342E'
+export const STATUS_COLORS: { [key: string]: { text: string; bg: string } } = {
+  AVAILABLE: { text: '#22c55e', bg: 'rgba(34,197,94,0.15)' },
+  RENTED: { text: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+  MAINTENANCE: { text: '#ef4444', bg: 'rgba(239,68,68,0.15)' },
+  PENDING: { text: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+  CONFIRMED: { text: '#3b82f6', bg: 'rgba(59,130,246,0.15)' },
+  ACTIVE: { text: '#22c55e', bg: 'rgba(34,197,94,0.15)' },
+  COMPLETED: { text: '#8b5cf6', bg: 'rgba(139,92,246,0.15)' },
+  CANCELLED: { text: '#ef4444', bg: 'rgba(239,68,68,0.15)' },
+  PAID: { text: '#22c55e', bg: 'rgba(34,197,94,0.15)' },
+  FAILED: { text: '#ef4444', bg: 'rgba(239,68,68,0.15)' }
 };
 
-export const STATUS_CONFIG: { [key: string]: { color: string; bg: string; pulse: boolean } } = {
-  PENDING: { color: '#FF8F00', bg: '#FFF3E0', pulse: false },
-  CONFIRMED: { color: '#1565C0', bg: '#E3F2FD', pulse: false },
-  ACTIVE: { color: '#2E7D32', bg: '#E8F5E9', pulse: true },
-  COMPLETED: { color: '#757575', bg: '#F5F5F5', pulse: false },
-  CANCELLED: { color: '#C62828', bg: '#FFEBEE', pulse: false }
-};
+export const DISTRICTS = [
+  'Mumbai', 'Pune', 'Nashik', 'Nagpur', 'Aurangabad',
+  'Solapur', 'Kolhapur', 'Sangli', 'Satara', 'Ratnagiri',
+  'Ahmednagar', 'Jalgaon', 'Dhule', 'Nanded', 'Latur',
+  'Osmanabad', 'Beed', 'Parbhani', 'Hingoli', 'Washim'
+];

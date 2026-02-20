@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { User } from '../models/equipment.model';
+import { User, UserRole } from '../models/equipment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -7,6 +7,10 @@ export class AuthService {
 
   user = this.currentUser.asReadonly();
   isLoggedIn = computed(() => this.currentUser() !== null);
+  userRole = computed<UserRole | null>(() => {
+    const u = this.currentUser();
+    return u ? (u.role as UserRole) : null;
+  });
 
   constructor() {
     const stored = localStorage.getItem('krishirent_user');
@@ -27,5 +31,9 @@ export class AuthService {
   logout() {
     this.currentUser.set(null);
     localStorage.removeItem('krishirent_user');
+  }
+
+  hasRole(role: UserRole): boolean {
+    return this.userRole() === role;
   }
 }

@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 export interface Toast {
   id: number;
   message: string;
-  type: 'success' | 'error' | 'info';
+  type: 'success' | 'error' | 'info' | 'warning';
   removing?: boolean;
 }
 
@@ -12,10 +12,10 @@ export class ToastService {
   toasts = signal<Toast[]>([]);
   private counter = 0;
 
-  show(message: string, type: 'success' | 'error' | 'info' = 'info') {
+  show(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info') {
     const id = ++this.counter;
     this.toasts.update(t => [...t, { id, message, type }]);
-    setTimeout(() => this.dismiss(id), 3000);
+    setTimeout(() => this.dismiss(id), 3500);
   }
 
   dismiss(id: number) {

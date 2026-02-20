@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
-import { Booking, CATEGORY_IMAGES, STATUS_CONFIG } from '../../models/equipment.model';
+import { Booking, CATEGORY_IMAGES, STATUS_COLORS } from '../../models/equipment.model';
 
 @Component({
   selector: 'app-my-bookings',
@@ -250,7 +250,8 @@ export class MyBookingsComponent implements OnInit {
   }
 
   getStatusConfig(status: string) {
-    return STATUS_CONFIG[status] || STATUS_CONFIG['PENDING'];
+    const s = STATUS_COLORS[status] || { text: '#f59e0b', bg: 'rgba(245,158,11,0.15)' };
+    return { color: s.text, bg: s.bg, pulse: status === 'ACTIVE' };
   }
 
   formatDate(dateStr: string): string {

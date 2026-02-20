@@ -2,10 +2,11 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { Equipment, Booking, BookingRequest, User, UserRegisterRequest, UserLoginRequest, Payment, PaymentRequest } from '../models/equipment.model';
+import { environment } from '../environment';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = environment.apiUrl;
   serverOffline = signal(false);
 
   constructor(private http: HttpClient) {}
@@ -42,6 +43,34 @@ export class ApiService {
     );
   }
 
+  createEquipment(equipment: Partial<Equipment>): Observable<Equipment | null> {
+    return this.http.post<Equipment>(`${this.apiUrl}/equipment`, equipment).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Equipment | null>(null))
+    );
+  }
+
+  updateEquipment(id: number, equipment: Partial<Equipment>): Observable<Equipment | null> {
+    return this.http.put<Equipment>(`${this.apiUrl}/equipment/${id}`, equipment).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Equipment | null>(null))
+    );
+  }
+
+  deleteEquipment(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/equipment/${id}`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError(null))
+    );
+  }
+
+  updateEquipmentStatus(id: number, status: string): Observable<Equipment | null> {
+    return this.http.put<Equipment>(`${this.apiUrl}/equipment/${id}/status`, null, { params: { status } }).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Equipment | null>(null))
+    );
+  }
+
   // Bookings
   createBooking(request: BookingRequest): Observable<Booking | null> {
     return this.http.post<Booking>(`${this.apiUrl}/bookings`, request).pipe(
@@ -57,8 +86,22 @@ export class ApiService {
     );
   }
 
+  getBookingsByEquipment(equipmentId: number): Observable<Booking[]> {
+    return this.http.get<Booking[]>(`${this.apiUrl}/bookings/equipment/${equipmentId}`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Booking[]>([]))
+    );
+  }
+
   cancelBooking(id: number): Observable<Booking | null> {
     return this.http.put<Booking>(`${this.apiUrl}/bookings/${id}/cancel`, {}).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Booking | null>(null))
+    );
+  }
+
+  completeBooking(id: number): Observable<Booking | null> {
+    return this.http.put<Booking>(`${this.apiUrl}/bookings/${id}/complete`, {}).pipe(
       tap(() => this.serverOffline.set(false)),
       catchError(this.handleError<Booking | null>(null))
     );
@@ -68,6 +111,24 @@ export class ApiService {
     return this.http.get<Booking>(`${this.apiUrl}/bookings/${id}`).pipe(
       tap(() => this.serverOffline.set(false)),
       catchError(this.handleError<Booking | null>(null))
+    );
+  }
+
+  checkAvailability(equipmentId: number, startTime: string, endTime: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/bookings/availability`, {
+      params: { equipmentId: equipmentId.toString(), startTime, endTime }
+    }).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<boolean>(false))
+    );
+  }
+
+  getBookingCost(equipmentId: number, startTime: string, endTime: string): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/bookings/cost`, {
+      params: { equipmentId: equipmentId.toString(), startTime, endTime }
+    }).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<number>(0))
     );
   }
 
@@ -93,6 +154,13 @@ export class ApiService {
     );
   }
 
+  updateUser(id: number, user: Partial<User>): Observable<User | null> {
+    return this.http.put<User>(`${this.apiUrl}/users/${id}`, user).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<User | null>(null))
+    );
+  }
+
   // Payments
   createPayment(request: PaymentRequest): Observable<Payment | null> {
     return this.http.post<Payment>(`${this.apiUrl}/payments`, request).pipe(
@@ -103,6 +171,13 @@ export class ApiService {
 
   getPaymentsByFarmer(farmerId: number): Observable<Payment[]> {
     return this.http.get<Payment[]>(`${this.apiUrl}/payments/farmer/${farmerId}`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Payment[]>([]))
+    );
+  }
+
+  getPaymentsByOwner(ownerId: number): Observable<Payment[]> {
+    return this.http.get<Payment[]>(`${this.apiUrl}/payments/owner/${ownerId}`).pipe(
       tap(() => this.serverOffline.set(false)),
       catchError(this.handleError<Payment[]>([]))
     );
@@ -148,13 +223,6 @@ export class ApiService {
     return this.http.get<Payment[]>(`${this.apiUrl}/payments/admin/all`).pipe(
       tap(() => this.serverOffline.set(false)),
       catchError(this.handleError<Payment[]>([]))
-    );
-  }
-
-  deleteEquipment(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/equipment/${id}`).pipe(
-      tap(() => this.serverOffline.set(false)),
-      catchError(this.handleError(null))
     );
   }
 }

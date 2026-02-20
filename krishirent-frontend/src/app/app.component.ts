@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ToastComponent } from './components/toast/toast.component';
@@ -11,13 +11,24 @@ import { ServerOfflineComponent } from './components/server-offline/server-offli
   imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastComponent, ServerOfflineComponent],
   template: `
     <app-server-offline />
-    <app-navbar />
-    <main style="min-height: calc(100vh - 140px);">
+    @if (!isDashboardRoute()) {
+      <app-navbar />
+    }
+    <main [style.minHeight]="isDashboardRoute() ? '100vh' : 'calc(100vh - 140px)'">
       <router-outlet />
     </main>
-    <app-footer />
+    @if (!isDashboardRoute()) {
+      <app-footer />
+    }
     <app-toast />
   `,
   styles: []
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(private router: Router) {}
+
+  isDashboardRoute(): boolean {
+    const url = this.router.url;
+    return url.startsWith('/farmer') || url.startsWith('/owner') || url.startsWith('/admin');
+  }
+}
