@@ -107,4 +107,54 @@ export class ApiService {
       catchError(this.handleError<Payment[]>([]))
     );
   }
+
+  // Admin
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<User[]>([]))
+    );
+  }
+
+  getUserCount(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/users/count`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<number>(0))
+    );
+  }
+
+  getEquipmentCount(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/equipment/count`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<number>(0))
+    );
+  }
+
+  getAllBookings(): Observable<Booking[]> {
+    return this.http.get<Booking[]>(`${this.apiUrl}/admin/bookings`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Booking[]>([]))
+    );
+  }
+
+  getAdminStats(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/admin/stats`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<any>(null))
+    );
+  }
+
+  getAllPayments(): Observable<Payment[]> {
+    return this.http.get<Payment[]>(`${this.apiUrl}/payments/admin/all`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError<Payment[]>([]))
+    );
+  }
+
+  deleteEquipment(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/equipment/${id}`).pipe(
+      tap(() => this.serverOffline.set(false)),
+      catchError(this.handleError(null))
+    );
+  }
 }
